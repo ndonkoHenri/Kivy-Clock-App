@@ -10,8 +10,6 @@ from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
 
-
-
 class ClockApp(MDApp):
     # Clock object for the clock(in the app) event
     event_clock = None
