@@ -1,4 +1,4 @@
-## Basic Clock and Stopwatch Application using Kivy/KivyMD
+## A real-time Clock and Stopwatch Application using Kivy/KivyMD
 
 This application was built using [Kivy](https://github.com/kivy/kivy) (a python framework for building cross-platform apps) and [KivyMD](https://github.com/kivymd/KivyMD) library.
 
