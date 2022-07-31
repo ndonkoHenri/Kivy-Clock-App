@@ -1,6 +1,7 @@
 from time import strftime
 from kivy import Config
 
+# a fixed size is set for the app's display when executed
 Config.set("graphics", "height", "323")
 Config.set("graphics", "width", "444")
 
@@ -9,13 +10,9 @@ from kivymd.uix.screen import MDScreen
 from kivy.clock import Clock
 
 
-# TODO: Find how to unschedule events from the MainScreen (self.root.parent.blablabla)
-# TODO: Write the functions found in the KV file, here in the pythonFile
 
 
 class ClockApp(MDApp):
-    # Clock object for the Chrono event
-    event_chrono = None
     # Clock object for the clock(in the app) event
     event_clock = None
 
@@ -35,10 +32,11 @@ class ClockApp(MDApp):
         """
 
         self.event_clock = Clock.schedule_interval(self.root.clock_update, 1)
-        self.event_chrono = Clock.schedule_interval(self.root.chrono_update, 0.032)
 
 
 class MainScreen(MDScreen):
+    # Clock object for the Chrono event
+    event_chrono = None
 
     def __init__(self, **kw):
         super().__init__(**kw)
@@ -61,22 +59,37 @@ class MainScreen(MDScreen):
         and chrono_secs(number of seconds since started) variables from the sum of ~param: dt (total_seconds)
         and then updates the text of Chrono in the app to reflect these changes.
 
-        :param dt: Update the chrono_mins and chrono_secs variables
+        :param dt: Useful in updating the chrono_mins and chrono_secs variables
         """
         self.total_seconds += dt
         self.chrono_mins, self.chrono_secs = divmod(self.total_seconds, 60)
-        self.ids.chrono_label.text = f"[b] {int(self.chrono_mins)} [/b]: {int(self.chrono_secs)}.[size=30sp]{int((self.chrono_secs * 100) % 100)}[/size]"
+
+        # We update the chrono label. A
+        self.ids.chrono_label.text = f"[b] {str(int(self.chrono_mins)).zfill(2)} [/b]: {str(int(self.chrono_secs)).zfill(2)}.[size=30sp]{str(int((self.chrono_secs * 100) % 100)).zfill(2)}[/size]"
+        # The string function zfill() plays a significant role on the above line.
+        # It adds leading Zeros accounting for a stable display.
+        # Please read its documentation for more info at
 
     def reset_chrono(self):
         """
         Resets the Chrono and changes the start_stop_btn.text to "Start"
         """
+        self.event_chrono.cancel()
+        self.ids.chrono_label.text = "[b] 00 [/b]: 00.[size=30sp]00[/size]"
+        self.total_seconds = 0
+        self.ids.start_stop_btn.text = "Start"
 
     def start_stop_chrono(self):
         """
         Starts or Stops the Chrono depending on the Text in the Button(start_stop_btn)
         and equally changes it(the text) accordingly
         """
+        if self.ids.start_stop_btn.text == "Start":
+            self.event_chrono = Clock.schedule_interval(self.chrono_update, 0.042)
+            self.ids.start_stop_btn.text = "Stop"
+        else:
+            self.event_chrono.cancel()
+            self.ids.start_stop_btn.text = "Start"
 
 
 if __name__ == "__main__":

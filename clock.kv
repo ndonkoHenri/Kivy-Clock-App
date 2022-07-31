@@ -1,9 +1,9 @@
 
-<SpecialButton@MDRaisedButton>
+<MyButton@MDRaisedButton>
     font_name: 'Roboto'
 
 
-<SpecialLabel@MDLabel>
+<MyLabel@MDLabel>
     halign: "center"
     font_name: 'Roboto'
     markup: True
@@ -21,7 +21,7 @@
         pos_hint: {"center_x": .5}
 
 
-        SpecialLabel:
+        MyLabel:
             id: time_label
             text: "[b] 00 [/b]: 00 : 00 %p"
 
@@ -37,33 +37,19 @@
             adaptive_height: True
 
 
-            SpecialButton:
+            MyButton:
                 id: start_stop_btn
-                text: "Stop"
-                # TODO: Move the block below to the python file
-                on_release:
-                    app.on_start() \
-                    if self.text == "Start" else \
-                    app.event_chrono.cancel();
-                    self.text = "Start" \
-                    if self.text == "Stop" else \
-                    "Stop"
+                text: "Start"
+                on_release: root.start_stop_chrono()
 
 
-
-            SpecialButton:
+            MyButton:
                 id: reset_btn
                 text: "Reset"
                 md_bg_color: 1,0,0,.8
-                # TODO: Move the block below to the python file
-                on_release:
-                    app.event_chrono.cancel(); \
-                    chrono_label.text = "[b] 00 [/b]: 00.[size=30sp]00[/size]"; \
-                    root.total_seconds = 0; \
-                    start_stop_btn.text = "Start"
+                on_release: root.reset_chrono()
 
 
-
-        SpecialLabel:
+        MyLabel:
             id: chrono_label
             text: "[b] 00 [/b]: 00.[size=30sp]00[/size]"
