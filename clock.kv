@@ -1,0 +1,69 @@
+
+<SpecialButton@MDRaisedButton>
+    font_name: 'Roboto'
+
+
+<SpecialLabel@MDLabel>
+    halign: "center"
+    font_name: 'Roboto'
+    markup: True
+    font_size: "60sp"
+
+
+
+<MainScreen>
+    time_label: time_label
+    md_bg_color: app.theme_cls.bg_normal
+
+
+    MDBoxLayout:
+        orientation: "vertical"
+        pos_hint: {"center_x": .5}
+
+
+        SpecialLabel:
+            id: time_label
+            text: "[b] 00 [/b]: 00 : 00 %p"
+
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            spacing: dp(20)
+            pos_hint: {"center_x": .5}
+            height: dp(90)
+            # TODO: Adjust the paddings to be relative to window size
+            padding: dp(150),dp(0)
+            size_hint_y: None
+            adaptive_height: True
+
+
+            SpecialButton:
+                id: start_stop_btn
+                text: "Stop"
+                # TODO: Move the block below to the python file
+                on_release:
+                    app.on_start() \
+                    if self.text == "Start" else \
+                    app.event_chrono.cancel();
+                    self.text = "Start" \
+                    if self.text == "Stop" else \
+                    "Stop"
+
+
+
+            SpecialButton:
+                id: reset_btn
+                text: "Reset"
+                md_bg_color: 1,0,0,.8
+                # TODO: Move the block below to the python file
+                on_release:
+                    app.event_chrono.cancel(); \
+                    chrono_label.text = "[b] 00 [/b]: 00.[size=30sp]00[/size]"; \
+                    root.total_seconds = 0; \
+                    start_stop_btn.text = "Start"
+
+
+
+        SpecialLabel:
+            id: chrono_label
+            text: "[b] 00 [/b]: 00.[size=30sp]00[/size]"
